@@ -44,6 +44,8 @@ class OptionParser {
  public:
   void set_description(string description);
 
+  string usage() const;
+
   void add_checked_option(char short_key, Slice long_key, Slice description, std::function<Status(Slice)> callback);
 
   void add_checked_option(char short_key, Slice long_key, Slice description, std::function<Status(void)> callback);

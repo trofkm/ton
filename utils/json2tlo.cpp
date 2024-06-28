@@ -71,7 +71,7 @@ int main(int argc, char *argv[]) {
   }
 
   if (in_f.size() == 0) {
-    std::cerr << "missing --in option" << std::endl;
+    std::cerr << p.usage() << std::endl;
     return 2;
   }
 

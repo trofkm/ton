@@ -182,14 +182,13 @@ Result<vector<char *>> OptionParser::run(int argc, char *argv[], int expected_no
   return std::move(non_options);
 }
 
-StringBuilder &operator<<(StringBuilder &sb, const OptionParser &o) {
-  if (!o.description_.empty()) {
-    sb << o.description_ << ". ";
-  }
+string OptionParser::usage() const {
+  StringBuilder sb;
+  sb << "Usage: " << this->description_ << " [option(s)] \n";
   sb << "Options:\n";
 
   size_t max_length = 0;
-  for (auto &opt : o.options_) {
+  for (auto &opt : options_) {
     bool has_short_key = opt.short_key != '\0';
     bool has_long_key = !opt.long_key.empty();
     size_t length = (has_short_key ? 2 : 0) + (has_long_key ? 2 + opt.long_key.size() + 2 * has_short_key : 0);
@@ -202,7 +201,7 @@ StringBuilder &operator<<(StringBuilder &sb, const OptionParser &o) {
   }
   max_length++;
 
-  for (auto &opt : o.options_) {
+  for (auto &opt : options_) {
     bool has_short_key = opt.short_key != '\0';
     sb << "  ";
     size_t length = max_length;
@@ -225,6 +224,11 @@ StringBuilder &operator<<(StringBuilder &sb, const OptionParser &o) {
     sb << string(length, ' ') << opt.description;
     sb << '\n';
   }
+  return sb.as_cslice().str();
+}
+
+StringBuilder &operator<<(StringBuilder &sb, const OptionParser &o) {
+  sb << o.usage();
   return sb;
 }
 
